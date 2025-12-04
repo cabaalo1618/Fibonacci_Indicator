@@ -1,79 +1,114 @@
-📐 Fibonacci Indicator (Python)
+📊 Fibonacci Indicator — Crypto, Forex & Metals (Candlestick Chart)
 
-A custom financial indicator based on Fibonacci mathematics, designed for pattern recognition, cycle analysis, and potential integration into trading strategies.
-This project is part of a broader exploration of mathematical patterns found in nature and financial markets.
+A lightweight JavaScript-based market analysis tool that fetches real-time historical data (Crypto, Forex, Commodities, Stocks) from Alpha Vantage, and displays it using candlestick charts with stylish custom colors.
+This project was developed as a personal tool for studying Fibonacci behavior in price action, but anyone can use or expand it.
 
 🚀 Features
 
-✓ Computes multiple Fibonacci levels automatically
-✓ Works with both price highs and lows
-✓ Clean and modular Python code
-✓ Easy to integrate with trading bots or backtesting systems
-✓ Beginner-friendly structure for study and expansion
+📈 Candlestick chart visualization
 
-📦 Project Structure
+🔍 Fetches real-time or recent market OHLC data
+
+🌐 Supports any ticker symbol from Alpha Vantage
+
+🎨 Custom bullish (sky blue) and bearish (wine/red) candle colors
+
+⚙ Built with:
+
+JavaScript (vanilla)
+
+Chart.js
+
+chartjs-chart-financial (for candlestick support)
+
+date-fns adapter
+
+🌙 Dark UI for better chart visibility
+
+♾ Automatically displays the maximum possible number of candles
+
+🔧 Simple, clean code — easy to modify
+
+📁 Full separation: index.html + app.js + style.css
+
+📂 Project Structure
 Fibonacci_Indicator/
 │
-├── main.py               # Example of indicator usage
-├── fibonacci.py          # Indicator logic and calculations
-├── utils.py              # Helper functions (math, validation, etc.)
-├── README.md             # Documentation
-└── requirements.txt      # Dependencies (if needed)
+├── index.html      # Main app interface
+├── app.js          # Chart logic + API communication
+├── style.css       # Visual design / color scheme
+└── README.md       # Project documentation
 
-📊 How it Works
+⚙ How It Works
 
-The indicator computes Fibonacci-based levels derived from price inputs.
-These levels may help identify:
+The user enters any trading symbol
+(e.g. BTCUSD, GOLD, AAPL, USD/BRL, EURUSD...)
 
-potential support zones
+The app sends a request to Alpha Vantage using the function:
 
-resistance zones
-
-trend reversal points
-
-cyclic movements in price action
-
-This tool is not a ready-to-use trading bot, but a core mathematical engine meant to be extended.
-
-🧩 Example Usage
-from fibonacci import FibonacciIndicator
-
-fib = FibonacciIndicator(high=100, low=80)
-
-levels = fib.calculate()
-print(levels)
+TIME_SERIES_DAILY
 
 
-Output:
+The response returns OHLC data
+(Open, High, Low, Close)
 
-{
-    '0%': 80,
-    '23.6%': 84.72,
-    '38.2%': 87.64,
-    '50%': 90,
-    '61.8%': 92.36,
-    '78.6%': 95.72,
-    '100%': 100
-}
+The tool transforms that data into a format accepted by chartjs-chart-financial
 
-🛠 Requirements
+The candlestick chart is drawn with custom colors and responsive layout
 
-Python 3.10+
+The chart updates each time the user searches a new symbol
 
-No external libraries (pure Python)
+📡 API Used
+Alpha Vantage
 
-📘 To-Do / Future Improvements
+Website: https://www.alphavantage.co/
 
-Integration with real market data
+The free tier supports:
 
-Candlestick pattern recognition
+Stocks
 
-Fibonacci time cycles
+Crypto
 
-TradingView or MetaTrader version
+Forex
 
-Visualization (matplotlib charts)
+Metals (Gold, Silver)
 
+Many international tickers
+
+You must use your own API key.
+Insert it inside app.js:
+
+const API_KEY = "YOUR_API_KEY_HERE";
+
+📦 Installation & Usage
+Clone the repository
+git clone https://github.com/cabaalo1618/Fibonacci_Indicator.git
+
+🔮 Future Improvements
+
+Add Fibonacci retracement levels automatically                          B
+Add moving averages (EMA, SMA)                                          E
+Add volume bars                                                                         T
+Add timeframe selection (1min, 5min, 1h, daily…)                                        O
+                                                                                                H
+Cache responses locally                                                  W                      E
+Integrate Plotly for zoom-based charts                                   E                      L
+Deploy via GitHub Pages for live demo                                    L                      P
+Pull requests are welcome!                                               C
+If you find an issue or want to suggest a feature,                       O
+open an Issue in the repository.                                         M
+                                                                         E
 🧑‍💻 Author
 
-Developed by Thiago Monteiro (cabaalo1618)
+Thiago Monteiro
+Brazil 🇧🇷
+Passionate about markets, mathematics, coding, 
+patterns in nature, and technology.
+
+⭐ If you like this project…
+
+Please consider starring the repository ⭐ on GitHub — it helps a lot!
+
+
+
+            - Thiago Monteiro Github : @cabaalo1618
