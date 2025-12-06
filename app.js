@@ -407,6 +407,28 @@ document.getElementById("manualFibBtn").addEventListener("click", () => {
     showSuccess("📐 Fibonacci manual gerado!");
 });
 
+document.getElementById("maBtn").addEventListener("click", () => {
+    const period = parseInt(document.getElementById("maPeriod").value);
+
+    if (!window.lastCandles) {
+        showError("Carregue um gráfico antes de gerar MA.");
+        return;
+    }
+    if (period < 2) {
+        showError("Período inválido para MA.");
+        return;
+    }
+
+    const maData = calculateMA(window.lastCandles, period);
+    addMALine(maData);
+
+    showSuccess("📈 Média Móvel adicionada!");
+});
+document.getElementById("clearFibBtn")?.addEventListener("click", clearFibonacci);
+document.getElementById("clearMaBtn")?.addEventListener("click", clearMA);
+document.getElementById("clearAllBtn")?.addEventListener("click", resetChartOnlyOverlays);
+
+
 // Sugestões
 document.querySelectorAll('.symbol-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -444,4 +466,94 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 });
+//------------------------------------------------------------
+// Funcoes pra add MA e respectiva linha no grafico
+//-------------------------------
+
+function calculateMA(candles, period) {
+    if (candles.length < period) return [];
+
+    const result = [];
+
+    for (let i = period - 1; i < candles.length; i++) {
+        let sum = 0;
+        for (let j = i - period + 1; j <= i; j++) {
+            sum += candles[j].close;
+        }
+        const avg = sum / period;
+
+        result.push({ time: candles[i].time, value: avg });
+    }
+
+    return result;
+}
+function addMALine(maData) {
+    const color = document.getElementById("maColor").value;
+    const width = parseInt(document.getElementById("maWidth").value);
+    const style = parseInt(document.getElementById("maStyle").value);
+
+    const maLine = chart.addLineSeries({
+        color: color,
+        lineWidth: width,
+        lineStyle: style,
+        priceLineVisible: false
+    });
+
+    maLine.setData(maData);
+
+    if (!window.maLines) window.maLines = [];
+    window.maLines.push(maLine);
+
+    return maLine;
+}
+
+// ---------------------------------------------
+//  Limpar Fibonacci
+// ---------------------------------
+function clearFibonacci() {
+    if (window.fibLines && window.fibLines.length > 0) {
+        window.fibLines.forEach(line => {
+            try { chart.removeSeries(line); } catch {}
+        });
+        window.fibLines = [];
+        showSuccess("📐 Fibonacci removido!");
+    } else {
+        showError("Nenhuma Fibonacci para limpar.");
+    }
+}
+
+
+
+// ---------------------------------------------
+// Limpar Médias Móveis
+// -------------------------------------------
+function clearMA() {
+    if (window.maLines && window.maLines.length > 0) {
+        window.maLines.forEach(line => {
+            try { chart.removeSeries(line); } catch {}
+        });
+        window.maLines = [];
+        showSuccess("📈 Médias móveis removidas!");
+    } else {
+        showError("Nenhuma MA para limpar.");
+    }
+}
+
+
+
+// ------------------------------------------
+//  Função: limpar TUDO, menos os candles
+// ---------------------------------------------
+function resetChartOnlyOverlays() {
+    clearFibonacci();
+    clearMA();
+    showSuccess("🔄 Sobreposições limpas (MA + Fibo).");
+}
+
+
 initializeChart();
+
+
+//     .´.
+//1,618...yes my friends, it is EVERYWHERE   
+

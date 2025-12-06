@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -267,7 +266,24 @@
       </div>
 
       <button id="manualFibBtn">📐 Gerar Fibonacci Manual</button>
+      
     </div>
+    <button id="clearFibBtn">❌ Limpar Fibonacci</button>
+
+    <!--Media Movel-->
+    <div><label>Periodo</label><input id="maPeriod" name="Periodo" type="number" value="20"></div>
+    <div><label>Espessura</label><input id="maWidth" type="number" value="2"></div>
+    <div><label>Cor</label><input id="maColor" type="color" name="Cor" value="#00ffea"></div>
+
+    <button id="clearMaBtn">❌ Limpar MAs</button>
+
+
+    <select id="maStyle">
+      <option value="0">Sólida</option>
+      <option value="1">Pontilhada</option>
+      <option value="2">Tracejada</option>
+    </select>
+    <button id="maBtn">📈 Gerar Média Móvel</button>
 
     <div class="symbol-suggestions"> <!-- Ações -->
       <div class="symbol-btn stock-symbol" data-symbol="AAPL">📱 AAPL</div>
@@ -284,6 +300,9 @@
     </div>
     <div class="status">
       <div id="loading" class="loading hidden">🔄 Carregando dados...</div>
+
+    <!--limpar grafico--><button id="clearAllBtn">🧹 Limpar Tudo (Fibo + MA)</button>
+
       <div id="error" class="error hidden"></div>
       <div id="success" class="success hidden"></div>
     </div>
@@ -293,7 +312,12 @@
     </div>
   </div>
   <script src="app.js"></script>
+
+
 </body>
 
 </html>
 
+
+<!--        .´.         -->
+<!--   1,618...yes my friends, it is EVERYWHERE   -->
