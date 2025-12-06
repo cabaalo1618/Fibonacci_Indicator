@@ -1,13 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Indicador Fibonacci - Análise de Mercado</title>
-
-  <!-- Lightweight Charts - VERSÃO ESPECÍFICA E ESTÁVEL -->
+  <title>Indicador Fibonacci - Análise de Mercado</title> <!-- Lightweight Charts - VERSÃO ESPECÍFICA E ESTÁVEL -->
   <script src="https://unpkg.com/lightweight-charts@3.8.0/dist/lightweight-charts.standalone.production.js"></script>
-
   <style>
     * {
       margin: 0;
@@ -71,7 +70,8 @@
       font-size: 1.1em;
     }
 
-    input, select {
+    input,
+    select {
       padding: 12px 15px;
       background: rgba(50, 50, 50, 0.8);
       border: 2px solid #444;
@@ -81,7 +81,8 @@
       transition: all 0.3s ease;
     }
 
-    input:focus, select:focus {
+    input:focus,
+    select:focus {
       outline: none;
       border-color: #f5d76e;
       box-shadow: 0 0 10px rgba(245, 215, 110, 0.3);
@@ -219,64 +220,80 @@
     <div class="header">
       <h1>📈 Indicador Fibonacci </h1>
       <h6></h6>Análise Técnica de Mercado em Tempo Real focada em ferramentas Fibonacci <br>
-      <p>Por Thiago Monteiro</p></h6>
+      <p>Por Thiago Monteiro</p>
+      </h6>
     </div>
-    
     <div class="controls">
-      <div class="control-group">
-        <label for="marketType">Mercado:</label>
+      <div class="control-group"> <label for="marketType">Mercado:</label>
         <div class="market-type">
           <div class="market-btn active" data-type="stocks">Ações</div>
           <div class="market-btn" data-type="forex">Forex</div>
           <div class="market-btn" data-type="crypto">Crypto</div>
         </div>
       </div>
-
+      <div class="control-group"> <label for="symbol">Símbolo:</label> <input id="symbol" type="text" value="AAPL"
+          placeholder="Ex: AAPL, EURUSD, BTC" /> </div>
+      <div class="control-group"> <label for="dateFrom">Data Início:</label> <input id="dateFrom" type="date"
+          value="2024-01-01" /> </div> <button id="buscar">🚀 Buscar Dados</button>
+    </div>
+    <div class="controls" style="margin-top:20px;">
       <div class="control-group">
-        <label for="symbol">Símbolo:</label>
-        <input id="symbol" type="text" value="AAPL" placeholder="Ex: AAPL, EURUSD, BTC" />
+        <label>Máximo:</label>
+        <input id="fibHigh" type="number" step="0.0001" placeholder="Ex: 52.40">
       </div>
 
       <div class="control-group">
-        <label for="dateFrom">Data Início:</label>
-        <input id="dateFrom" type="date" value="2024-01-01" />
+        <label>Mínimo:</label>
+        <input id="fibLow" type="number" step="0.0001" placeholder="Ex: 47.80">
       </div>
 
-      <button id="buscar">🚀 Buscar Dados</button>
+      <div class="control-group">
+        <label>Cor:</label>
+        <input id="fibColor" type="color" value="#f5d76e">
+      </div>
+
+      <div class="control-group">
+        <label>Largura:</label>
+        <input id="fibWidth" type="number" value="1" min="1" max="5">
+      </div>
+
+      <div class="control-group">
+        <label>Estilo:</label>
+        <select id="fibStyle">
+          <option value="0">Sólida</option>
+          <option value="1">Pontilhada</option>
+          <option value="2">Tracejada</option>
+        </select>
+      </div>
+
+      <button id="manualFibBtn">📐 Gerar Fibonacci Manual</button>
     </div>
 
-    <div class="symbol-suggestions">
-      <!-- Ações -->
+    <div class="symbol-suggestions"> <!-- Ações -->
       <div class="symbol-btn stock-symbol" data-symbol="AAPL">📱 AAPL</div>
       <div class="symbol-btn stock-symbol" data-symbol="MSFT">💻 MSFT</div>
       <div class="symbol-btn stock-symbol" data-symbol="GOOGL">🔍 GOOGL</div>
-      <div class="symbol-btn stock-symbol" data-symbol="PETR4.SAO">🛢️ PETR4</div>
-      
-      <!-- Forex -->
+      <div class="symbol-btn stock-symbol" data-symbol="PETR4.SAO">🛢️ PETR4</div> <!-- Forex -->
       <div class="symbol-btn forex-symbol hidden" data-symbol="EURUSD">💶 EUR/USD</div>
       <div class="symbol-btn forex-symbol hidden" data-symbol="USDJPY">💵 USD/JPY</div>
       <div class="symbol-btn forex-symbol hidden" data-symbol="GBPUSD">💷 GBP/USD</div>
-      <div class="symbol-btn forex-symbol hidden" data-symbol="USDBRL">💵 USD/BRL</div>
-      
-      <!-- Crypto -->
+      <div class="symbol-btn forex-symbol hidden" data-symbol="USDBRL">💵 USD/BRL</div> <!-- Crypto -->
       <div class="symbol-btn crypto-symbol hidden" data-symbol="BTCUSD">₿ BTC/USD</div>
       <div class="symbol-btn crypto-symbol hidden" data-symbol="ETHUSD">🔷 ETH/USD</div>
       <div class="symbol-btn crypto-symbol hidden" data-symbol="ADAUSD">🟦 ADA/USD</div>
     </div>
-
     <div class="status">
       <div id="loading" class="loading hidden">🔄 Carregando dados...</div>
       <div id="error" class="error hidden"></div>
       <div id="success" class="success hidden"></div>
     </div>
-
     <div id="chartContainer"></div>
-
     <div class="footer">
       <p>Desenvolvido para Análise Técnica com Indicadores Fibonacci | Dados via Alpha Vantage</p>
     </div>
   </div>
-
   <script src="app.js"></script>
 </body>
+
 </html>
+
