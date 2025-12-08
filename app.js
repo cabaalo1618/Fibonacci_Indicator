@@ -228,61 +228,7 @@ function calculateManualFibonacci(high, low) {
 }
 
 
-// --------------------------------------------------------------
-// 5. ADICIONAR LINHAS E RÓTULOS DE FIBONACCI (única mudança)
-// ---------------------------------------------------------
-function addFibonacciLevels(levels, candles) {
-    if (!chart || !candles || candles.length === 0) return;
 
-    // remover linhas antigas
-    if (window.fibLines) {
-        window.fibLines.forEach(line => {
-            try { chart.removeSeries(line); } catch { }
-        });
-    }
-    window.fibLines = [];
-
-    const color = document.getElementById("fibColor")?.value || "#f5d76e";
-    const baseWidth = parseFloat(document.getElementById("fibWidth")?.value || 1);
-    const style = parseInt(document.getElementById("fibStyle")?.value || 0);
-
-    const firstTime = candles[0].time;
-    const lastTime = candles[candles.length - 1].time;
-
-    levels.forEach(level => {
-        const isKey = (level.level === '38.2%' || level.level === '61.8%');
-        const lineWidth = isKey ? baseWidth + 1 : baseWidth;
-
-        const line = chart.addLineSeries({
-            color: color,
-            lineWidth: lineWidth,
-            lineStyle: style,
-            priceLineVisible: false
-        });
-
-        line.setData([
-            { time: firstTime, value: level.value },
-            { time: lastTime, value: level.value },
-        ]);
-
-        // LABEL
-        const labelSeries = chart.addLineSeries({
-            color: color,
-            lineWidth: 0,
-            priceLineVisible: false
-        });
-
-        labelSeries.setData([
-            {
-                time: lastTime,
-                value: level.value,
-                text: `[ ${level.level} ]`
-            }
-        ]);
-
-        window.fibLines.push(line, labelSeries);
-    });
-}
 
 // ---------------------------------------------------------
 // 6. Atualizar gráfico
@@ -387,6 +333,8 @@ document.getElementById('buscar').addEventListener('click', async () => {
     }
 });
 
+// --------------------------------------------------------------------Evetos Fibonacci --------------------
+
 document.getElementById("manualFibBtn").addEventListener("click", () => {
     const high = parseFloat(document.getElementById("fibHigh").value);
     const low = parseFloat(document.getElementById("fibLow").value);
@@ -406,7 +354,7 @@ document.getElementById("manualFibBtn").addEventListener("click", () => {
     addFibonacciLevels(levels, window.lastCandles);
     showSuccess("📐 Fibonacci manual gerado!");
 });
-
+// --------------------------------------------------------------------Evetos da MA --------------------
 document.getElementById("maBtn").addEventListener("click", () => {
     const period = parseInt(document.getElementById("maPeriod").value);
 
@@ -427,6 +375,53 @@ document.getElementById("maBtn").addEventListener("click", () => {
 document.getElementById("clearFibBtn")?.addEventListener("click", clearFibonacci);
 document.getElementById("clearMaBtn")?.addEventListener("click", clearMA);
 document.getElementById("clearAllBtn")?.addEventListener("click", resetChartOnlyOverlays);
+
+// --------------------------------------------------------------------Evetos da BB --------------------
+
+let bbMiddleLine = null;
+let bbUpperLine = null;
+let bbLowerLine = null;
+document.getElementById("clearBbBtn").addEventListener("click", clearBB);
+
+document.getElementById("bbBtn").addEventListener("click", () => {
+  if (!globalChartData || globalChartData.length === 0) {
+    showError("Carregue os dados primeiro!");
+    return;
+  }
+
+  const period = parseInt(document.getElementById("bbPeriod").value);
+  const deviations = parseFloat(document.getElementById("bbDeviations").value);
+
+  const colorMA = document.getElementById("bbColorMA").value;
+  const colorUpper = document.getElementById("bbColorUpper").value;
+  const colorLower = document.getElementById("bbColorLower").value;
+
+  const width = parseInt(document.getElementById("bbWidth").value);
+
+  // CALCULAR BB
+  const { middle, upper, lower } = calcularBollingerBands(globalChartData, period, deviations);
+
+  // Criar linhas se ainda não existem
+  if (!bbMiddleLine) {
+    bbMiddleLine = chart.addLineSeries({ color: colorMA, lineWidth: width });
+    bbUpperLine = chart.addLineSeries({ color: colorUpper, lineWidth: width });
+    bbLowerLine = chart.addLineSeries({ color: colorLower, lineWidth: width });
+  }
+
+  // Gerar arrays formatados para o gráfico
+  const times = globalChartData.map(c => c.time);
+
+  const midData = times.map((t, i) => middle[i] ? { time: t, value: middle[i] } : null).filter(Boolean);
+  const upData  = times.map((t, i) => upper[i]  ? { time: t, value: upper[i] } : null).filter(Boolean);
+  const lowData = times.map((t, i) => lower[i]  ? { time: t, value: lower[i] } : null).filter(Boolean);
+
+  bbMiddleLine.setData(midData);
+  bbUpperLine.setData(upData);
+  bbLowerLine.setData(lowData);
+
+  showSuccess("Bollinger Bands geradas com sucesso!");
+});
+
 
 
 // Sugestões
@@ -466,8 +461,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 });
+// --------------------------------------------------------------
+// 5. ADICIONAR LINHAS E RÓTULOS DE FIBONACCI (única mudança)
+// ---------------------------------------------------------
+function addFibonacciLevels(levels, candles) {
+    if (!chart || !candles || candles.length === 0) return;
+
+    // remover linhas antigas
+    if (window.fibLines) {
+        window.fibLines.forEach(line => {
+            try { chart.removeSeries(line); } catch { }
+        });
+    }
+    window.fibLines = [];
+
+    const color = document.getElementById("fibColor")?.value || "#f5d76e";
+    const baseWidth = parseFloat(document.getElementById("fibWidth")?.value || 1);
+    const style = parseInt(document.getElementById("fibStyle")?.value || 0);
+
+    const firstTime = candles[0].time;
+    const lastTime = candles[candles.length - 1].time;
+
+    levels.forEach(level => {
+        const isKey = (level.level === '38.2%' || level.level === '61.8%');
+        const lineWidth = isKey ? baseWidth + 1 : baseWidth;
+
+        const line = chart.addLineSeries({
+            color: color,
+            lineWidth: lineWidth,
+            lineStyle: style,
+            priceLineVisible: false
+        });
+
+        line.setData([
+            { time: firstTime, value: level.value },
+            { time: lastTime, value: level.value },
+        ]);
+
+        // LABEL
+        const labelSeries = chart.addLineSeries({
+            color: color,
+            lineWidth: 0,
+            priceLineVisible: false
+        });
+
+        labelSeries.setData([
+            {
+                time: lastTime,
+                value: level.value,
+                text: `[ ${level.level} ]`
+            }
+        ]);
+
+        window.fibLines.push(line, labelSeries);
+    });
+}
 //------------------------------------------------------------
-// Funcoes pra add MA e respectiva linha no grafico
+// -------------------------------------------------------Funcoes pra add MA e respectiva linha no grafico----------------
 //-------------------------------
 
 function calculateMA(candles, period) {
@@ -507,6 +557,40 @@ function addMALine(maData) {
     return maLine;
 }
 
+
+// --------------------------------       BOLLINGER BANDS          ----------------------------------
+
+
+function calcularBollingerBands(data, period = 20, deviations = 2) {
+  const middle = [];
+  const upper = [];
+  const lower = [];
+
+  for (let i = 0; i < data.length; i++) {
+    if (i < period) {
+      middle.push(null);
+      upper.push(null);
+      lower.push(null);
+      continue;
+    }
+
+    const slice = data.slice(i - period, i).map(c => c.close);
+    const avg = slice.reduce((a, b) => a + b, 0) / slice.length;
+
+    const variance =
+      slice.reduce((sum, v) => sum + Math.pow(v - avg, 2), 0) / slice.length;
+
+    const stdDev = Math.sqrt(variance);
+
+    middle.push(avg);
+    upper.push(avg + deviations * stdDev);
+    lower.push(avg - deviations * stdDev);
+  }
+
+  return { middle, upper, lower };
+}
+
+
 // ---------------------------------------------
 //  Limpar Fibonacci
 // ---------------------------------
@@ -539,6 +623,56 @@ function clearMA() {
     }
 }
 
+// ------------------------------------------------------
+// Limpar Bollinger Bands
+//----------------------------------------------------------------
+function clearBB() {
+    let removedSomething = false;
+
+    if (bbMiddleLine) {
+        bbMiddleLine.setData([]);
+        try { chart.removeSeries(bbMiddleLine); } catch {}
+        bbMiddleLine = null;
+        removedSomething = true;
+    }
+
+    if (bbUpperLine) {
+        bbUpperLine.setData([]);
+        try { chart.removeSeries(bbUpperLine); } catch {}
+        bbUpperLine = null;
+        removedSomething = true;
+    }
+
+    if (bbLowerLine) {
+        bbLowerLine.setData([]);
+        try { chart.removeSeries(bbLowerLine); } catch {}
+        bbLowerLine = null;
+        removedSomething = true;
+    }
+
+    if (removedSomething) {
+        showSuccess("📉 Bollinger Bands removidas!");
+    } else {
+        showError("Nenhuma Bollinger Band para limpar.");
+    }
+}
+
+// ---------------------------------------------
+// Limpar Médias Móveis
+// -------------------------------------------
+
+function clearMA() {
+    if (window.maLines && window.maLines.length > 0) {
+        window.maLines.forEach(line => {
+            try { chart.removeSeries(line); } catch {}
+        });
+        window.maLines = [];
+        showSuccess("📈 Médias móveis removidas!");
+    } else {
+        showError("Nenhuma MA para limpar.");
+    }
+}
+
 
 
 // ------------------------------------------
@@ -547,8 +681,10 @@ function clearMA() {
 function resetChartOnlyOverlays() {
     clearFibonacci();
     clearMA();
-    showSuccess("🔄 Sobreposições limpas (MA + Fibo).");
+    clearBB();
+    showSuccess("🔄 Sobreposições limpas (Fibo + MA + BB).");
 }
+
 
 
 initializeChart();

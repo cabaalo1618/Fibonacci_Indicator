@@ -127,9 +127,59 @@ id="maPanel"
       </div>
     </div>
   </div>
-
 </div>
 
+<!-- ITEM 3 – BOLLINGER BANDS -->
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+      data-bs-target="#bbPanel">
+      (BB) Bollinger Bands
+    </button>
+  </h2>
+
+  <div id="bbPanel" class="accordion-collapse collapse">
+    <div class="accordion-body dark-panel">
+
+      <div class="control-group">
+        <label>Período:</label>
+        <input id="bbPeriod" type="number" value="20" min="2">
+      </div>
+
+      <div class="control-group">
+        <label>Desvios:</label>
+        <input id="bbDeviations" type="number" value="2" min="1" step="0.5">
+      </div>
+
+      <div class="control-group">
+        <label>Cor da Linha Central (MA):</label>
+        <input id="bbColorMA" type="color" value="#ffffff">
+      </div>
+
+      <div class="control-group">
+        <label>Cor Banda Superior:</label>
+        <input id="bbColorUpper" type="color" value="#00ff00">
+      </div>
+
+      <div class="control-group">
+        <label>Cor Banda Inferior:</label>
+        <input id="bbColorLower" type="color" value="#ff0000">
+      </div>
+
+      <div class="control-group">
+        <label>Espessura:</label>
+        <input id="bbWidth" type="number" value="2" min="1" max="5">
+      </div>
+
+      <button id="bbBtn">📊 Gerar Bollinger Bands</button>
+      <button id="clearBbBtn">❌ Limpar BB</button>
+
+    </div>
+  </div>
+</div>
+
+
+<!--              ------------------------          ATIVOS E MOEDAS            -------------------                    -->
  <div class="symbol-suggestions">
           <div class="symbol-btn stock-symbol" data-symbol="AAPL">📱 AAPL</div>
           <div class="symbol-btn stock-symbol" data-symbol="MSFT">💻 MSFT</div>
@@ -168,3 +218,4 @@ id="maPanel"
 
 <!--        .´.         -->
 <!--   1,618...yes my friends, it is EVERYWHERE   -->
+
