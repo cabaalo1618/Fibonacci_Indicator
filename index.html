@@ -6,221 +6,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Indicador Fibonacci - Análise de Mercado</title> <!-- Lightweight Charts - VERSÃO ESPECÍFICA E ESTÁVEL -->
   <script src="https://unpkg.com/lightweight-charts@3.8.0/dist/lightweight-charts.standalone.production.js"></script>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
-      color: #eee;
-      min-height: 100vh;
-      padding: 20px;
-    }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      background: rgba(26, 26, 26, 0.95);
-      border-radius: 15px;
-      padding: 25px;
-      box-shadow: 0 8px 32px rgba(255, 215, 0, 0.1);
-      border: 1px solid rgba(255, 215, 0, 0.1);
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-      padding-bottom: 20px;
-      border-bottom: 2px solid rgba(245, 215, 110, 0.3);
-    }
-
-    .header h1 {
-      color: #f5d76e;
-      font-size: 2.5em;
-      margin-bottom: 10px;
-      text-shadow: 0 2px 10px rgba(245, 215, 110, 0.3);
-    }
-
-    .controls {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-      background: rgba(40, 40, 40, 0.6);
-      padding: 20px;
-      border-radius: 10px;
-    }
-
-    .control-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    label {
-      font-weight: bold;
-      color: #f5d76e;
-      font-size: 1.1em;
-    }
-
-    input,
-    select {
-      padding: 12px 15px;
-      background: rgba(50, 50, 50, 0.8);
-      border: 2px solid #444;
-      color: #eee;
-      border-radius: 8px;
-      font-size: 1em;
-      transition: all 0.3s ease;
-    }
-
-    input:focus,
-    select:focus {
-      outline: none;
-      border-color: #f5d76e;
-      box-shadow: 0 0 10px rgba(245, 215, 110, 0.3);
-    }
-
-    #symbol {
-      width: 180px;
-    }
-
-    #dateFrom {
-      width: 150px;
-    }
-
-    button {
-      padding: 12px 25px;
-      background: linear-gradient(135deg, #f5d76e 0%, #ffcc00 100%);
-      border: none;
-      color: #000;
-      cursor: pointer;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 1em;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(245, 215, 110, 0.3);
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(245, 215, 110, 0.4);
-    }
-
-    button:disabled {
-      background: #666;
-      transform: none;
-      box-shadow: none;
-      cursor: not-allowed;
-    }
-
-    .status {
-      text-align: center;
-      margin: 15px 0;
-      min-height: 40px;
-    }
-
-    .loading {
-      color: #f5d76e;
-      font-size: 1.1em;
-    }
-
-    .error {
-      color: #ff6b6b;
-      background: rgba(255, 107, 107, 0.1);
-      padding: 15px;
-      border-radius: 8px;
-      border: 1px solid #ff6b6b;
-    }
-
-    .success {
-      color: #26a69a;
-      background: rgba(38, 166, 154, 0.1);
-      padding: 15px;
-      border-radius: 8px;
-      border: 1px solid #26a69a;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    #chartContainer {
-      margin-top: 20px;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: #000;
-      height: 600px;
-    }
-
-    .symbol-suggestions {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin-top: 15px;
-      flex-wrap: wrap;
-    }
-
-    .symbol-btn {
-      padding: 8px 15px;
-      background: rgba(245, 215, 110, 0.2);
-      border: 1px solid rgba(245, 215, 110, 0.3);
-      color: #f5d76e;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 0.9em;
-    }
-
-    .symbol-btn:hover {
-      background: rgba(245, 215, 110, 0.3);
-      transform: translateY(-1px);
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 25px;
-      color: #666;
-      font-size: 0.9em;
-    }
-
-    .market-type {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .market-btn {
-      padding: 8px 15px;
-      background: rgba(124, 216, 255, 0.2);
-      border: 1px solid rgba(124, 216, 255, 0.3);
-      color: #7cd8ff;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .market-btn.active {
-      background: rgba(124, 216, 255, 0.4);
-      border-color: #7cd8ff;
-    }
-  </style>
 </head>
 
 <body>
+
   <div class="container">
     <div class="header">
+
       <h1>📈 Indicador Fibonacci </h1>
-      <h6></h6>Análise Técnica de Mercado em Tempo Real focada em ferramentas Fibonacci <br>
-      <p>Por Thiago Monteiro</p>
+
+      <h6>Análise Técnica de Mercado em Tempo Real focada em ferramentas Fibonacci <br></h6>
+      Por Thiago Monteiro
       </h6>
+
     </div>
     <div class="controls">
       <div class="control-group"> <label for="marketType">Mercado:</label>
@@ -235,81 +38,125 @@
       <div class="control-group"> <label for="dateFrom">Data Início:</label> <input id="dateFrom" type="date"
           value="2024-01-01" /> </div> <button id="buscar">🚀 Buscar Dados</button>
     </div>
-    <div class="controls" style="margin-top:20px;">
-      <div class="control-group">
-        <label>Máximo:</label>
-        <input id="fibHigh" type="number" step="0.0001" placeholder="Ex: 52.40">
-      </div>
 
-      <div class="control-group">
-        <label>Mínimo:</label>
-        <input id="fibLow" type="number" step="0.0001" placeholder="Ex: 47.80">
-      </div>
+    <!-----------------------------------------------data-bs-target="#fiboPanel"
+id="fiboPanel"
+------------------------------ Accordion Principal --->
 
-      <div class="control-group">
-        <label>Cor:</label>
-        <input id="fibColor" type="color" value="#f5d76e">
-      </div>
+<div class="accordion" id="accordionIndicators">
 
-      <div class="control-group">
-        <label>Largura:</label>
-        <input id="fibWidth" type="number" value="1" min="1" max="5">
-      </div>
+  <!-- ITEM 1 – FIBONACCI -->
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#fiboPanel">
+        Fibonacci Tools
+      </button>
+    </h2>
 
-      <div class="control-group">
-        <label>Estilo:</label>
-        <select id="fibStyle">
+    <div id="fiboPanel" class="accordion-collapse collapse">
+      <div class="accordion-body dark-panel">
+
+        <div class="controls" style="margin-top:20px;">
+          <div class="control-group">
+            <label>Máximo:</label>
+            <input id="fibHigh" type="number" step="0.0001" placeholder="Ex: 52.40">
+          </div>
+
+          <div class="control-group">
+            <label>Mínimo:</label>
+            <input id="fibLow" type="number" step="0.0001" placeholder="Ex: 47.80">
+          </div>
+
+          <div class="control-group">
+            <label>Cor:</label>
+            <input id="fibColor" type="color" value="#f5d76e">
+          </div>
+
+          <div class="control-group">
+            <label>Largura:</label>
+            <input id="fibWidth" type="number" value="1" min="1" max="5">
+          </div>
+
+          <div class="control-group">
+            <label>Estilo:</label>
+            <select id="fibStyle">
+              <option value="0">Sólida</option>
+              <option value="1">Pontilhada</option>
+              <option value="2">Tracejada</option>
+            </select>
+          </div>
+
+          <button id="manualFibBtn">📐 Gerar Fibonacci Manual</button>
+        </div>
+
+        <button id="clearFibBtn">❌ Limpar Fibonacci</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ITEM 2 –-----------------------data-bs-target="#maPanel"
+id="maPanel"
+---------------------- MOVING AVERAGE----------------- -->
+
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#maPanel" >
+        (MA) Moving Average
+      </button>
+    </h2>
+
+    <div id="maPanel" class="accordion-collapse collapse">
+      <div class="accordion-body dark-panel">
+
+        <div><label>Periodo</label><input id="maPeriod" type="number" value="20"></div>
+        <div><label>Espessura</label><input id="maWidth" type="number" value="2"></div>
+        <div><label>Cor</label><input id="maColor" type="color" value="#00ffea"></div>
+
+        <button id="clearMaBtn">❌ Limpar MAs</button>
+
+        <select id="maStyle">
           <option value="0">Sólida</option>
           <option value="1">Pontilhada</option>
           <option value="2">Tracejada</option>
         </select>
+
+        <button id="maBtn">📈 Gerar Média Móvel</button>
+       
       </div>
-
-      <button id="manualFibBtn">📐 Gerar Fibonacci Manual</button>
-      
     </div>
-    <button id="clearFibBtn">❌ Limpar Fibonacci</button>
+  </div>
 
-    <!--Media Movel-->
-    <div><label>Periodo</label><input id="maPeriod" name="Periodo" type="number" value="20"></div>
-    <div><label>Espessura</label><input id="maWidth" type="number" value="2"></div>
-    <div><label>Cor</label><input id="maColor" type="color" name="Cor" value="#00ffea"></div>
+</div>
 
-    <button id="clearMaBtn">❌ Limpar MAs</button>
+ <div class="symbol-suggestions">
+          <div class="symbol-btn stock-symbol" data-symbol="AAPL">📱 AAPL</div>
+          <div class="symbol-btn stock-symbol" data-symbol="MSFT">💻 MSFT</div>
+          <div class="symbol-btn stock-symbol" data-symbol="GOOGL">🔍 GOOGL</div>
+          <div class="symbol-btn stock-symbol" data-symbol="PETR4.SAO">🛢️ PETR4</div>
+          <div class="symbol-btn forex-symbol hidden" data-symbol="EURUSD">💶 EUR/USD</div>
+          <div class="symbol-btn forex-symbol hidden" data-symbol="USDJPY">💵 USD/JPY</div>
+          <div class="symbol-btn forex-symbol hidden" data-symbol="GBPUSD">💷 GBP/USD</div>
+          <div class="symbol-btn forex-symbol hidden" data-symbol="USDBRL">💵 USD/BRL</div>
+          <div class="symbol-btn crypto-symbol hidden" data-symbol="BTCUSD">₿ BTC/USD</div>
+          <div class="symbol-btn crypto-symbol hidden" data-symbol="ETHUSD">🔷 ETH/USD</div>
+          <div class="symbol-btn crypto-symbol hidden" data-symbol="ADAUSD">🟦 ADA/USD</div>
+        </div>
+
+        <div class="status">
+          <div id="loading" class="loading hidden">🔄 Carregando dados...</div>
+        </div>
+<button id="clearAllBtn">🧹 Limpar Tudo (Fibo + MA)</button>
 
 
-    <select id="maStyle">
-      <option value="0">Sólida</option>
-      <option value="1">Pontilhada</option>
-      <option value="2">Tracejada</option>
-    </select>
-    <button id="maBtn">📈 Gerar Média Móvel</button>
-
-    <div class="symbol-suggestions"> <!-- Ações -->
-      <div class="symbol-btn stock-symbol" data-symbol="AAPL">📱 AAPL</div>
-      <div class="symbol-btn stock-symbol" data-symbol="MSFT">💻 MSFT</div>
-      <div class="symbol-btn stock-symbol" data-symbol="GOOGL">🔍 GOOGL</div>
-      <div class="symbol-btn stock-symbol" data-symbol="PETR4.SAO">🛢️ PETR4</div> <!-- Forex -->
-      <div class="symbol-btn forex-symbol hidden" data-symbol="EURUSD">💶 EUR/USD</div>
-      <div class="symbol-btn forex-symbol hidden" data-symbol="USDJPY">💵 USD/JPY</div>
-      <div class="symbol-btn forex-symbol hidden" data-symbol="GBPUSD">💷 GBP/USD</div>
-      <div class="symbol-btn forex-symbol hidden" data-symbol="USDBRL">💵 USD/BRL</div> <!-- Crypto -->
-      <div class="symbol-btn crypto-symbol hidden" data-symbol="BTCUSD">₿ BTC/USD</div>
-      <div class="symbol-btn crypto-symbol hidden" data-symbol="ETHUSD">🔷 ETH/USD</div>
-      <div class="symbol-btn crypto-symbol hidden" data-symbol="ADAUSD">🟦 ADA/USD</div>
-    </div>
-    <div class="status">
-      <div id="loading" class="loading hidden">🔄 Carregando dados...</div>
-
-    <!--limpar grafico--><button id="clearAllBtn">🧹 Limpar Tudo (Fibo + MA)</button>
-
-      <div id="error" class="error hidden"></div>
-      <div id="success" class="success hidden"></div>
-    </div>
-    <div id="chartContainer"></div>
-    <div class="footer">
-      <p>Desenvolvido para Análise Técnica com Indicadores Fibonacci | Dados via Alpha Vantage</p>
-    </div>
+  <div id="error" class="error hidden"></div>
+  <div id="success" class="success hidden"></div>
+  </div>
+  <div id="chartContainer"></div>
+  <div class="footer">
+    <p>Desenvolvido para Análise Técnica com Indicadores Fibonacci | Dados via Alpha Vantage</p>
+  </div>
   </div>
   <script src="app.js"></script>
 
