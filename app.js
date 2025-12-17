@@ -304,7 +304,7 @@ function updateSymbolSuggestions(marketType) {
 }
 
 // -------------------------------------------------------------
-// 8. Eventos
+//                                                             ******   EVENTS   *******-------------------------------
 // ---------------------------------------------------------
 document.getElementById('buscar').addEventListener('click', async () => {
     const symbolInput = document.getElementById('symbol');
@@ -384,7 +384,7 @@ let bbLowerLine = null;
 document.getElementById("clearBbBtn").addEventListener("click", clearBB);
 
 document.getElementById("bbBtn").addEventListener("click", () => {
-  if (!globalChartData || globalChartData.length === 0) {
+  if (!window.lastCandles || window.lastCandles.length === 0) {
     showError("Carregue os dados primeiro!");
     return;
   }
@@ -398,28 +398,28 @@ document.getElementById("bbBtn").addEventListener("click", () => {
 
   const width = parseInt(document.getElementById("bbWidth").value);
 
-  // CALCULAR BB
-  const { middle, upper, lower } = calcularBollingerBands(globalChartData, period, deviations);
+  const { middle, upper, lower } =
+    calcularBollingerBands(window.lastCandles, period, deviations);
 
-  // Criar linhas se ainda não existem
   if (!bbMiddleLine) {
     bbMiddleLine = chart.addLineSeries({ color: colorMA, lineWidth: width });
-    bbUpperLine = chart.addLineSeries({ color: colorUpper, lineWidth: width });
-    bbLowerLine = chart.addLineSeries({ color: colorLower, lineWidth: width });
+    bbUpperLine  = chart.addLineSeries({ color: colorUpper, lineWidth: width });
+    bbLowerLine  = chart.addLineSeries({ color: colorLower, lineWidth: width });
   }
 
-  // Gerar arrays formatados para o gráfico
-  const times = globalChartData.map(c => c.time);
+  const times = window.lastCandles.map(c => c.time);
 
-  const midData = times.map((t, i) => middle[i] ? { time: t, value: middle[i] } : null).filter(Boolean);
-  const upData  = times.map((t, i) => upper[i]  ? { time: t, value: upper[i] } : null).filter(Boolean);
-  const lowData = times.map((t, i) => lower[i]  ? { time: t, value: lower[i] } : null).filter(Boolean);
+  bbMiddleLine.setData(
+    times.map((t, i) => middle[i] ? { time: t, value: middle[i] } : null).filter(Boolean)
+  );
+  bbUpperLine.setData(
+    times.map((t, i) => upper[i] ? { time: t, value: upper[i] } : null).filter(Boolean)
+  );
+  bbLowerLine.setData(
+    times.map((t, i) => lower[i] ? { time: t, value: lower[i] } : null).filter(Boolean)
+  );
 
-  bbMiddleLine.setData(midData);
-  bbUpperLine.setData(upData);
-  bbLowerLine.setData(lowData);
-
-  showSuccess("Bollinger Bands geradas com sucesso!");
+  showSuccess("📊 Bollinger Bands geradas!");
 });
 
 
@@ -458,6 +458,93 @@ document.addEventListener('DOMContentLoaded', () => {
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
     document.getElementById('dateFrom').value = sixMonthsAgo.toISOString().split('T')[0];
+
+    // RSI
+document.getElementById('rsiBtn')?.addEventListener('click', () => {
+    const period = parseInt(document.getElementById('rsiPeriod').value) || 14;
+    const color = document.getElementById('rsiColor').value;
+    const upper = parseInt(document.getElementById('rsiUpper').value) || 70;
+    const lower = parseInt(document.getElementById('rsiLower').value) || 30;
+    const width = parseInt(document.getElementById('rsiWidth').value) || 2;
+    
+    if (!window.lastCandles || window.lastCandles.length === 0) {
+        showError("Carregue um gráfico antes de gerar RSI.");
+        return;
+    }
+    
+    const rsiData = calcularRSI(window.lastCandles, period);
+    addRSILine(rsiData, color, width, upper, lower);
+    showSuccess("📊 RSI gerado com sucesso!");
+});
+
+document.getElementById('clearRsiBtn')?.addEventListener('click', clearRSI);
+
+// MACD
+document.getElementById('macdBtn')?.addEventListener('click', () => {
+    const fast = parseInt(document.getElementById('macdFast').value) || 12;
+    const slow = parseInt(document.getElementById('macdSlow').value) || 26;
+    const signal = parseInt(document.getElementById('macdSignal').value) || 9;
+    const macdColor = document.getElementById('macdColor').value;
+    const signalColor = document.getElementById('macdSignalColor').value;
+    const histColor = document.getElementById('macdHistColor').value;
+    
+    if (!window.lastCandles || window.lastCandles.length === 0) {
+        showError("Carregue um gráfico antes de gerar MACD.");
+        return;
+    }
+    
+    const macdData = calcularMACD(window.lastCandles, fast, slow, signal);
+    addMACDLines(macdData, macdColor, signalColor, histColor);
+    showSuccess("📉 MACD gerado com sucesso!");
+});
+
+document.getElementById('clearMacdBtn')?.addEventListener('click', clearMACD);
+
+// VOLUME
+document.getElementById('volumeBtn')?.addEventListener('click', () => {
+    const upColor = document.getElementById('volumeUpColor').value;
+    const downColor = document.getElementById('volumeDownColor').value;
+    const opacity = parseInt(document.getElementById('volumeOpacity').value) / 100;
+    
+    if (!window.lastCandles || window.lastCandles.length === 0) {
+        showError("Carregue um gráfico antes de mostrar volume.");
+        return;
+    }
+    
+    // Simular dados de volume (na API real você teria esses dados)
+    const volumeData = window.lastCandles.map((candle, index) => ({
+        time: candle.time,
+        value: Math.random() * 1000000 + 500000, // Dados simulados
+        color: candle.close >= candle.open ? upColor : downColor
+    }));
+    
+    addVolumeSeries(volumeData, opacity);
+    showSuccess("📊 Volume exibido!");
+});
+
+document.getElementById('clearVolumeBtn')?.addEventListener('click', clearVolume);
+
+// UTILITÁRIOS
+document.getElementById('saveLayoutBtn')?.addEventListener('click', salvarLayout);
+document.getElementById('loadLayoutBtn')?.addEventListener('click', carregarLayout);
+document.getElementById('exportPNGBtn')?.addEventListener('click', exportarParaPNG);
+document.getElementById('exportCSVBtn')?.addEventListener('click', exportarParaCSV);
+document.getElementById('analyzeTrendBtn')?.addEventListener('click', analisarTendencia);
+document.getElementById('clearAllIndBtn')?.addEventListener('click', limparTodosIndicadores);
+document.getElementById('closeTrendBtn')?.addEventListener('click', () => {
+    document.getElementById('trendAnalysis').classList.add('hidden');
+});
+
+// TEMA
+document.getElementById('themeSelect')?.addEventListener('change', (e) => {
+    alterarTema(e.target.value);
+});
+
+// Atualizar valor do slider de opacidade
+document.getElementById('volumeOpacity')?.addEventListener('input', (e) => {
+    document.getElementById('opacityValue').textContent = `${e.target.value}%`;
+});
+
 
 
 });
@@ -590,7 +677,78 @@ function calcularBollingerBands(data, period = 20, deviations = 2) {
   return { middle, upper, lower };
 }
 
+//------------------------------------------------------------
+//              -----------RSI---------------
+//------------------------------------------------------------------
 
+function calcularRSI(candles, period = 14) {
+    if (candles.length < period + 1) return [];
+    
+    const gains = [];
+    const losses = [];
+    
+    // Calcular ganhos e perdas
+    for (let i = 1; i < candles.length; i++) {
+        const diff = candles[i].close - candles[i-1].close;
+        gains.push(diff > 0 ? diff : 0);
+        losses.push(diff < 0 ? Math.abs(diff) : 0);
+    }
+    
+    const rsiData = [];
+    
+    // Primeira média
+    let avgGain = gains.slice(0, period).reduce((a, b) => a + b, 0) / period;
+    let avgLoss = losses.slice(0, period).reduce((a, b) => a + b, 0) / period;
+    
+    for (let i = period; i < candles.length; i++) {
+        avgGain = (avgGain * (period - 1) + gains[i]) / period;
+        avgLoss = (avgLoss * (period - 1) + losses[i]) / period;
+        
+        const rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
+        const rsi = 100 - (100 / (1 + rs));
+        
+        rsiData.push({
+            time: candles[i].time,
+            value: rsi
+        });
+    }
+    
+    return rsiData;
+}
+
+//-------------------------------------------------------
+//                         MACD
+//---------------------------------------------------------------
+
+function calcularMACD(candles, fastPeriod = 12, slowPeriod = 26, signalPeriod = 9) {
+    if (candles.length < slowPeriod + signalPeriod) return { macd: [], signal: [] };
+    
+    const prices = candles.map(c => c.close);
+    const emaFast = calcularEMA(prices, fastPeriod);
+    const emaSlow = calcularEMA(prices, slowPeriod);
+    
+    const macdLine = [];
+    for (let i = 0; i < prices.length; i++) {
+        if (emaFast[i] !== null && emaSlow[i] !== null) {
+            macdLine.push(emaFast[i] - emaSlow[i]);
+        } else {
+            macdLine.push(null);
+        }
+    }
+    
+    const signalLine = calcularEMA(macdLine.filter(v => v !== null), signalPeriod);
+    
+    return {
+        macd: candles.map((c, i) => ({
+            time: c.time,
+            value: macdLine[i]
+        })).filter(d => d.value !== null),
+        signal: candles.map((c, i) => ({
+            time: c.time,
+            value: signalLine[i] || null
+        })).filter(d => d.value !== null)
+    };
+}
 // ---------------------------------------------
 //  Limpar Fibonacci
 // ---------------------------------
@@ -626,6 +784,7 @@ function clearMA() {
 // ------------------------------------------------------
 // Limpar Bollinger Bands
 //----------------------------------------------------------------
+
 function clearBB() {
     let removedSomething = false;
 
@@ -673,11 +832,159 @@ function clearMA() {
     }
 }
 
+//------------------------------------------------------
+//                         VOLUMES
+//----------------------------------------------------
 
+// Adicionar série de volume abaixo do gráfico principal
+
+function adicionarVolume(candles, volumeData) {
+    const volumeSeries = chart.addHistogramSeries({
+        color: '#26a69a',
+        priceFormat: {
+            type: 'volume',
+        },
+        priceScaleId: '', // Preço separado
+    });
+    
+    volumeSeries.priceScale().applyOptions({
+        scaleMargins: {
+            top: 0.8,
+            bottom: 0,
+        },
+    });
+    
+    volumeSeries.setData(volumeData);
+    return volumeSeries;
+}
+
+//-------------------------------------------------------
+//                     HEATMAP
+//-------------------------------------------------------------
+
+function calcularHeatmapVolatilidade(candles) {
+    // Calcular desvio padrão móvel
+    const volatilidade = [];
+    const period = 20;
+    
+    for (let i = period; i < candles.length; i++) {
+        const slice = candles.slice(i - period, i);
+        const returns = slice.map((c, idx) => 
+            idx > 0 ? (c.close / slice[idx-1].close) - 1 : 0
+        );
+        
+        const avg = returns.reduce((a, b) => a + b, 0) / returns.length;
+        const variance = returns.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / returns.length;
+        const stdDev = Math.sqrt(variance);
+        
+        volatilidade.push({
+            time: candles[i].time,
+            value: stdDev * 100 // Em porcentagem
+        });
+    }
+    
+    return volatilidade;
+}
+
+//-----------------------------------------------------------
+//                       ANALISE DE TENDENCIA AUTOMATICA
+//---------------------------------------------------------
+
+function analisarTendencia(candles) {
+    const sma50 = calcularMA(candles, 50);
+    const sma200 = calcularMA(candles, 200);
+    
+    const ultimo50 = sma50[sma50.length - 1].value;
+    const ultimo200 = sma200[sma200.length - 1].value;
+    
+    if (ultimo50 > ultimo200 && candles[candles.length-1].close > ultimo50) {
+        return { 
+            tendencia: 'ALTA', 
+            forca: 'FORTE',
+            suporte: calcularSuportes(candles),
+            resistencia: calcularResistencias(candles)
+        };
+    } else if (ultimo50 < ultimo200 && candles[candles.length-1].close < ultimo50) {
+        return { 
+            tendencia: 'BAIXA', 
+            forca: 'FORTE' 
+        };
+    } else {
+        return { 
+            tendencia: 'LATERAL', 
+            forca: 'FRACA' 
+        };
+    }
+}
+
+//---------------------------------------------------------------------
+//                                            ===== FUNÇÕES DE APOIO  =====
+//----------------------------------------------------------------------------------------
+
+function addRSILine(rsiData, color, width, upper, lower) {
+    // Implementar adição da linha RSI
+}
+
+function clearRSI() {
+    // Implementar limpeza do RSI
+}
+
+function addMACDLines(macdData, macdColor, signalColor, histColor) {
+    // Implementar adição do MACD
+}
+
+function clearMACD() {
+    // Implementar limpeza do MACD
+}
+
+function addVolumeSeries(volumeData, opacity) {
+    // Implementar adição do volume
+}
+
+function clearVolume() {
+    // Implementar limpeza do volume
+}
+
+function salvarLayout() {
+    // Implementar salvamento de layout
+}
+
+function carregarLayout() {
+    // Implementar carregamento de layout
+}
+
+function exportarParaPNG() {
+    // Implementar exportação PNG
+}
+
+function exportarParaCSV() {
+    // Implementar exportação CSV
+}
+
+function analisarTendencia() {
+    // Implementar análise de tendência
+    document.getElementById('trendAnalysis').classList.remove('hidden');
+}
+
+function limparTodosIndicadores() {
+    clearFibonacci();
+    clearMA();
+    clearBB();
+    clearRSI();
+    clearMACD();
+    clearVolume();
+    showSuccess("🧹 Todos os indicadores foram removidos!");
+}
+
+function alterarTema(tema) {
+    // Implementar troca de tema
+    console.log(`Alterando para tema: ${tema}`);
+}
 
 // ------------------------------------------
 //  Função: limpar TUDO, menos os candles
 // ---------------------------------------------
+
 function resetChartOnlyOverlays() {
     clearFibonacci();
     clearMA();
