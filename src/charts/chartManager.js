@@ -2,6 +2,7 @@ import { showError } from "../ui/uiManager.js";
 
 let chart = null;
 let candleSeries = null;
+let maSeries = [];
 
 /* ===========================
    ESTADOS DE INDICADORES
@@ -125,10 +126,7 @@ export function drawFibonacci(levels, options = {}) {
   });
 
   // 🔥 FORÇA VISUALIZAÇÃO DO RANGE
-  chart.priceScale('right').setVisibleRange({
-    min: minPrice,
-    max: maxPrice
-  });
+ 
 
   console.log("📐 Fibonacci desenhado:", levels);
 }
@@ -148,3 +146,32 @@ export function clearFibonacci() {
 
   console.log("❌ Fibonacci removido");
 }
+
+// =============================== MA ===========================
+
+export function drawMA(maData, options = {}) {
+  if (!chart) return;
+
+  const {
+    color = "#00ffea",
+    width = 2,
+    style = 0
+  } = options;
+
+  const series = chart.addLineSeries({
+    color,
+    lineWidth: width,
+    lineStyle: style
+  });
+
+  series.setData(maData);
+  maSeries.push(series);
+}
+
+export function clearMA() {
+  if (!chart) return;
+
+  maSeries.forEach(series => chart.removeSeries(series));
+  maSeries = [];
+}
+
