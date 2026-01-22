@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* =========================================================
    1) RESET & BASE
 ========================================================= */
@@ -275,6 +276,8 @@ input:focus, select:focus {
   }
 }
 =======
+=======
+>>>>>>> 7c21d8e5bc0f1d71bdf22bdde043a222ccf18c56
  * {
      margin: 0;
      padding: 0;
@@ -778,5 +781,9 @@ input[type="range"]::-moz-range-thumb {
 
 .dark-panel::-webkit-scrollbar-thumb:hover {
     background: rgba(245, 215, 110, 0.7);
+<<<<<<< HEAD
+}
+>>>>>>> 7c21d8e5bc0f1d71bdf22bdde043a222ccf18c56
+=======
 }
 >>>>>>> 7c21d8e5bc0f1d71bdf22bdde043a222ccf18c56
