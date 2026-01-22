@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<<<<<<< HEAD
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indicador Fibonacci | Análise Técnica</title>
+
+  <!-- Lightweight Charts -->
+  <script src="https://unpkg.com/lightweight-charts@3.8.0/dist/lightweight-charts.standalone.production.js"></script>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+=======
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indicador Fibonacci - Análise de Mercado</title> <!-- Lightweight Charts - VERSÃO ESPECÍFICA E ESTÁVEL -->
+  <script src="https://unpkg.com/lightweight-charts@3.8.0/dist/lightweight-charts.standalone.production.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+>>>>>>> 7c21d8e5bc0f1d71bdf22bdde043a222ccf18c56
+</head>
+
+<body>
+
+<<<<<<< HEAD
+<div class="container">
+
+  <!-- ================= HEADER ================= -->
+  <header class="header text-center my-3">
+    <h1>📈 Indicador Fibonacci</h1>
+    <p>Análise Técnica de Mercado focada em Fibonacci</p>
+    <small>Por Thiago Monteiro</small>
+  </header>
+
+  <!-- ================= CONTROLES PRINCIPAIS ================= -->
+  <section class="controls">
+
+    <div class="control-group">
+      <label>Mercado:</label>
+      <div class="market-type">
+        <div class="market-btn active" data-type="stocks">Ações</div>
+        <div class="market-btn" data-type="forex">Forex</div>
+        <div class="market-btn" data-type="crypto">Crypto</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label>Símbolo:</label>
+      <select id="symbol"></select>
+
+    </div>
+
+    <div class="control-group">
+      <label>Data Inicial:</label>
+      <input id="dateFrom" type="date">
+    </div>
+
+    <button id="buscar">🚀 Buscar Dados</button>
+  </section>
+
+  <!-- ================= ACCORDION INDICADORES ================= -->
+  <div class="accordion mt-4" id="accordionIndicators">
+
+    <!-- ===== FIBONACCI ===== -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#fiboPanel">
+          📐 Fibonacci
+        </button>
+      </h2>
+      <div id="fiboPanel" class="accordion-collapse collapse">
+        <div class="accordion-body dark-panel">
+          <input id="fibHigh" type="number" placeholder="Máximo">
+          <input id="fibLow" type="number" placeholder="Mínimo">
+          <input id="fibColor" type="color" value="#f5d76e">
+          <input id="fibWidth" type="number" value="1">
+          <select id="fibStyle">
+            <option value="0">Sólida</option>
+            <option value="1">Pontilhada</option>
+            <option value="2">Tracejada</option>
+          </select>
+          <button id="manualFibBtn">Gerar Fibonacci</button>
+          <button id="clearFibBtn">Limpar Fibonacci</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== MOVING AVERAGE ===== -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#maPanel">
+          📈 Moving Average
+        </button>
+      </h2>
+      <div id="maPanel" class="accordion-collapse collapse">
+        <div class="accordion-body dark-panel">
+          <input id="maPeriod" type="number" value="20">
+          <input id="maWidth" type="number" value="2">
+          <input id="maColor" type="color" value="#00ffea">
+          <select id="maStyle">
+            <option value="0">Sólida</option>
+            <option value="1">Pontilhada</option>
+            <option value="2">Tracejada</option>
+          </select>
+          <button id="maBtn">Gerar MA</button>
+          <button id="clearMaBtn">Limpar MA</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== BOLLINGER BANDS ===== -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#bbPanel">
+          📊 Bollinger Bands
+        </button>
+      </h2>
+      <div id="bbPanel" class="accordion-collapse collapse">
+        <div class="accordion-body dark-panel">
+          <input id="bbPeriod" type="number" value="20">
+          <input id="bbDeviations" type="number" value="2">
+          <input id="bbColorMA" type="color">
+          <input id="bbColorUpper" type="color">
+          <input id="bbColorLower" type="color">
+          <input id="bbWidth" type="number" value="2">
+          <button id="bbBtn">Gerar BB</button>
+          <button id="clearBbBtn">Limpar BB</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== RSI ===== -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#rsiPanel">
+          📊 RSI
+        </button>
+      </h2>
+      <div id="rsiPanel" class="accordion-collapse collapse">
+        <div class="accordion-body dark-panel">
+          <input id="rsiPeriod" type="number" value="14">
+          <input id="rsiColor" type="color">
+          <input id="rsiUpper" type="number" value="70">
+          <input id="rsiLower" type="number" value="30">
+          <input id="rsiWidth" type="number" value="2">
+          <button id="rsiBtn">Gerar RSI</button>
+          <button id="clearRsiBtn">Limpar RSI</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== MACD ===== -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#macdPanel">
+          📉 MACD
+        </button>
+      </h2>
+      <div id="macdPanel" class="accordion-collapse collapse">
+        <div class="accordion-body dark-panel">
+          <input id="macdFast" type="number" value="12">
+          <input id="macdSlow" type="number" value="26">
+          <input id="macdSignal" type="number" value="9">
+          <input id="macdColor" type="color">
+          <input id="macdSignalColor" type="color">
+          <input id="macdHistColor" type="color">
+          <button id="macdBtn">Gerar MACD</button>
+          <button id="clearMacdBtn">Limpar MACD</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= STATUS ================= -->
+  <div id="loading" class="hidden">🔄 Carregando...</div>
+  <div id="error" class="error hidden"></div>
+  <div id="success" class="success hidden"></div>
+
+</div>
+
+<!-- ================= CHART ================= -->
+<div class="container-fluid mt-3">
+  <div id="chartContainer" style="height: 65vh;"></div>
+</div>
+
+<footer class="footer text-center mt-4">
+  <small>Dados via Alpha Vantage • Fibonacci 1.618</small>
+</footer>
+
+<!-- ================= JS ================= -->
+<script type="module" src="src/main.js"></script>
+
+</body>
+</html>
+=======
+  <div class="container">
+    <div class="header">
+
+      <h1>📈 Indicador Fibonacci </h1>
+
+      <h6>Análise Técnica de Mercado em Tempo Real focada em ferramentas Fibonacci <br></h6>
+      Por Thiago Monteiro
+      </h6>
+
+    </div>
+    <div class="controls">
+      <div class="control-group"> <label for="marketType">Mercado:</label>
+        <div class="market-type">
+          <div class="market-btn active" data-type="stocks">Ações</div>
+          <div class="market-btn" data-type="forex">Forex</div>
+          <div class="market-btn" data-type="crypto">Crypto</div>
+        </div>
+      </div>
+      <div class="control-group"> <label for="symbol">Símbolo:</label> <input id="symbol" type="text" value="AAPL"
+          placeholder="Ex: AAPL, EURUSD, BTC" /> </div>
+      <div class="control-group"> <label for="dateFrom">Data Início:</label> <input id="dateFrom" type="date"
+          value="2024-01-01" /> </div> <button id="buscar">🚀 Buscar Dados</button>
+    </div>
+
+    <!----------------------------------------------
+    ------------------------------ Accordion Principal --->
+
+<div class="accordion" id="accordionIndicators">
+
+  <!-- ITEM 1 – FIBONACCI -->
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#fiboPanel">
+        Fibonacci Tools
+      </button>
+    </h2>
+
+    <div id="fiboPanel" class="accordion-collapse collapse">
+      <div class="accordion-body dark-panel">
+
+        <div class="controls" style="margin-top:20px;">
+          <div class="control-group">
+            <label>Máximo:</label>
+            <input id="fibHigh" type="number" step="0.0001" placeholder="Ex: 52.40">
+          </div>
+
+          <div class="control-group">
+            <label>Mínimo:</label>
+            <input id="fibLow" type="number" step="0.0001" placeholder="Ex: 47.80">
+          </div>
+
+          <div class="control-group">
+            <label>Cor:</label>
+            <input id="fibColor" type="color" value="#f5d76e">
+          </div>
+
+          <div class="control-group">
+            <label>Largura:</label>
+            <input id="fibWidth" type="number" value="1" min="1" max="5">
+          </div>
+
+          <div class="control-group">
+            <label>Estilo:</label>
+            <select id="fibStyle">
+              <option value="0">Sólida</option>
+              <option value="1">Pontilhada</option>
+              <option value="2">Tracejada</option>
+            </select>
+          </div>
+
+          <button id="manualFibBtn">📐 Gerar Fibonacci Manual</button>
+        </div>
+
+        <button id="clearFibBtn">❌ Limpar Fibonacci</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ITEM 2 –-----------------------data-bs-target="#maPanel"
+id="maPanel"
+---------------------- MOVING AVERAGE----------------- -->
+
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#maPanel" >
+        (MA) Moving Average
+      </button>
+    </h2>
+
+    <div id="maPanel" class="accordion-collapse collapse">
+      <div class="accordion-body dark-panel">
+
+        <div><label>Periodo</label><input id="maPeriod" type="number" value="20"></div>
+        <div><label>Espessura</label><input id="maWidth" type="number" value="2"></div>
+        <div><label>Cor</label><input id="maColor" type="color" value="#00ffea"></div>
+
+        <button id="clearMaBtn">❌ Limpar MAs</button>
+
+        <select id="maStyle">
+          <option value="0">Sólida</option>
+          <option value="1">Pontilhada</option>
+          <option value="2">Tracejada</option>
+        </select>
+
+        <button id="maBtn">📈 Gerar Média Móvel</button>
+       
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ITEM 3 – BOLLINGER BANDS -->
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+      data-bs-target="#bbPanel">
+      (BB) Bollinger Bands
+    </button>
+  </h2>
+
+  <div id="bbPanel" class="accordion-collapse collapse">
+    <div class="accordion-body dark-panel">
+
+      <div class="control-group">
+        <label>Período:</label>
+        <input id="bbPeriod" type="number" value="20" min="2">
+      </div>
+
+      <div class="control-group">
+        <label>Desvios:</label>
+        <input id="bbDeviations" type="number" value="2" min="1" step="0.5">
+      </div>
+
+      <div class="control-group">
+        <label>Cor da Linha Central (MA):</label>
+        <input id="bbColorMA" type="color" value="#ffffff">
+      </div>
+
+      <div class="control-group">
+        <label>Cor Banda Superior:</label>
+        <input id="bbColorUpper" type="color" value="#00ff00">
+      </div>
+
+      <div class="control-group">
+        <label>Cor Banda Inferior:</label>
+        <input id="bbColorLower" type="color" value="#ff0000">
+      </div>
+
+      <div class="control-group">
+        <label>Espessura:</label>
+        <input id="bbWidth" type="number" value="2" min="1" max="5">
+      </div>
+
+      <button id="bbBtn">📊 Gerar Bollinger Bands</button>
+      <button id="clearBbBtn">❌ Limpar BB</button>
+
+    </div>
+  </div>
+</div>
+
+<!-- Adicione ESTA SEÇÃO após a seção de Bollinger Bands -->
+
+<!-- ITEM 4 – RSI (Relative Strength Index) -->
+<div class="accordion-item">
+    <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#rsiPanel">
+            📊 RSI (Índice de Força Relativa)
+        </button>
+    </h2>
+
+    <div id="rsiPanel" class="accordion-collapse collapse">
+        <div class="accordion-body dark-panel">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Período (padrão: 14):</label>
+                    <input id="rsiPeriod" type="number" value="14" min="2" max="50">
+                </div>
+
+                <div class="control-group">
+                    <label>Cor RSI:</label>
+                    <input id="rsiColor" type="color" value="#ff6b6b">
+                </div>
+
+                <div class="control-group">
+                    <label>Limite Superior (70):</label>
+                    <input id="rsiUpper" type="number" value="70" min="50" max="90">
+                </div>
+
+                <div class="control-group">
+                    <label>Limite Inferior (30):</label>
+                    <input id="rsiLower" type="number" value="30" min="10" max="50">
+                </div>
+
+                <div class="control-group">
+                    <label>Espessura:</label>
+                    <input id="rsiWidth" type="number" value="2" min="1" max="5">
+                </div>
+
+                <button id="rsiBtn" class="btn-indicator">📈 Gerar RSI</button>
+                <button id="clearRsiBtn" class="btn-clear">❌ Limpar RSI</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ITEM 5 – MACD -->
+<div class="accordion-item">
+    <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#macdPanel">
+            📉 MACD (Convergência/Divergência)
+        </button>
+    </h2>
+
+    <div id="macdPanel" class="accordion-collapse collapse">
+        <div class="accordion-body dark-panel">
+            <div class="controls">
+                <div class="control-group">
+                    <label>EMA Rápida (12):</label>
+                    <input id="macdFast" type="number" value="12" min="5" max="26">
+                </div>
+
+                <div class="control-group">
+                    <label>EMA Lenta (26):</label>
+                    <input id="macdSlow" type="number" value="26" min="12" max="50">
+                </div>
+
+                <div class="control-group">
+                    <label>Sinal (9):</label>
+                    <input id="macdSignal" type="number" value="9" min="5" max="20">
+                </div>
+
+                <div class="control-group">
+                    <label>Cor MACD:</label>
+                    <input id="macdColor" type="color" value="#26a69a">
+                </div>
+
+                <div class="control-group">
+                    <label>Cor Sinal:</label>
+                    <input id="macdSignalColor" type="color" value="#ef5350">
+                </div>
+
+                <div class="control-group">
+                    <label>Cor Histograma:</label>
+                    <input id="macdHistColor" type="color" value="#7cd8ff">
+                </div>
+
+                <button id="macdBtn" class="btn-indicator">📊 Gerar MACD</button>
+                <button id="clearMacdBtn" class="btn-clear">❌ Limpar MACD</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ITEM 6 – VOLUME -->
+<div class="accordion-item">
+    <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#volumePanel">
+            📊 Volume
+        </button>
+    </h2>
+
+    <div id="volumePanel" class="accordion-collapse collapse">
+        <div class="accordion-body dark-panel">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Cor Volume Alta:</label>
+                    <input id="volumeUpColor" type="color" value="#26a69a">
+                </div>
+
+                <div class="control-group">
+                    <label>Cor Volume Baixa:</label>
+                    <input id="volumeDownColor" type="color" value="#ef5350">
+                </div>
+
+                <div class="control-group">
+                    <label>Transparência:</label>
+                    <input id="volumeOpacity" type="range" min="10" max="100" value="70">
+                    <span id="opacityValue">70%</span>
+                </div>
+
+                <button id="volumeBtn" class="btn-indicator">📊 Mostrar Volume</button>
+                <button id="clearVolumeBtn" class="btn-clear">❌ Ocultar Volume</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ITEM 7 – UTILITÁRIOS -->
+<div class="accordion-item">
+    <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#utilsPanel">
+            ⚙️ Utilitários & Exportação
+        </button>
+    </h2>
+
+    <div id="utilsPanel" class="accordion-collapse collapse">
+        <div class="accordion-body dark-panel">
+            <div class="controls utils-grid">
+                <div class="control-group full-width">
+                    <button id="saveLayoutBtn" class="btn-utility">💾 Salvar Layout</button>
+                    <button id="loadLayoutBtn" class="btn-utility">📂 Carregar Layout</button>
+                </div>
+
+                <div class="control-group full-width">
+                    <button id="exportPNGBtn" class="btn-utility">🖼️ Exportar PNG</button>
+                    <button id="exportCSVBtn" class="btn-utility">📄 Exportar Dados CSV</button>
+                </div>
+
+                <div class="control-group full-width">
+                    <button id="analyzeTrendBtn" class="btn-utility">🔍 Analisar Tendência</button>
+                    <button id="clearAllIndBtn" class="btn-clear">🧹 Limpar TODOS Indicadores</button>
+                </div>
+
+                <div class="control-group full-width">
+                    <label for="themeSelect">Tema:</label>
+                    <select id="themeSelect" class="theme-select">
+                        <option value="dark">🌙 Dark (Padrão)</option>
+                        <option value="light">☀️ Light</option>
+                        <option value="blue">🔵 Blue Trading</option>
+                        <option value="green">🟢 Green Terminal</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--              ------------------------          ATIVOS E MOEDAS            -------------------                    -->
+ <div class="symbol-suggestions">
+          <div class="symbol-btn stock-symbol" data-symbol="AAPL">📱 AAPL</div>
+          <div class="symbol-btn stock-symbol" data-symbol="MSFT">💻 MSFT</div>
+          <div class="symbol-btn stock-symbol" data-symbol="GOOGL">🔍 GOOGL</div>
+          <div class="symbol-btn stock-symbol" data-symbol="PETR4.SAO">🛢️ PETR4</div>
+          <div class="symbol-btn forex-symbol hidden" data-symbol="EURUSD">💶 EUR/USD</div>
+          <div class="symbol-btn forex-symbol hidden" data-symbol="USDJPY">💵 USD/JPY</div>
+          <div class="symbol-btn forex-symbol hidden" data-symbol="GBPUSD">💷 GBP/USD</div>
+          <div class="symbol-btn forex-symbol hidden" data-symbol="USDBRL">💵 USD/BRL</div>
+          <div class="symbol-btn crypto-symbol hidden" data-symbol="BTCUSD">₿ BTC/USD</div>
+          <div class="symbol-btn crypto-symbol hidden" data-symbol="ETHUSD">🔷 ETH/USD</div>
+          <div class="symbol-btn crypto-symbol hidden" data-symbol="ADAUSD">🟦 ADA/USD</div>
+        </div>
+
+        <div class="status">
+          <div id="loading" class="loading hidden">🔄 Carregando dados...</div>
+        </div>
+<button id="clearAllBtn">🧹 Limpar Tudo (Fibo + MA)</button>
+
+
+  <div id="error" class="error hidden"></div>
+  <div id="success" class="success hidden"></div>
+  </div>
+ <div class="container-fluid mt-3">
+  <div class="card bg-dark border-light">
+    <div class="card-body">
+      <div id="chartContainer" style="width: 100%; height: 65vh;">
+        <div id="chart"></div>
+      </div>
+      <!-- NOVA SEÇÃO DE STATUS DE TENDÊNCIA (adicionar após o chartContainer) -->
+<div id="trendAnalysis" class="trend-analysis hidden">
+    <div class="trend-header">
+        <h4>📈 Análise de Tendência</h4>
+        <button id="closeTrendBtn" class="btn-close-trend">&times;</button>
+    </div>
+    <div class="trend-content">
+        <div class="trend-item">
+            <span class="trend-label">Tendência Principal:</span>
+            <span id="trendDirection" class="trend-value">--</span>
+        </div>
+        <div class="trend-item">
+            <span class="trend-label">Força:</span>
+            <span id="trendStrength" class="trend-value">--</span>
+        </div>
+        <div class="trend-item">
+            <span class="trend-label">Suporte:</span>
+            <span id="supportLevel" class="trend-value">--</span>
+        </div>
+        <div class="trend-item">
+            <span class="trend-label">Resistência:</span>
+            <span id="resistanceLevel" class="trend-value">--</span>
+        </div>
+        <div class="trend-item">
+            <span class="trend-label">RSI Atual:</span>
+            <span id="currentRSI" class="trend-value">--</span>
+        </div>
+        <div class="trend-item">
+            <span class="trend-label">Recomendação:</span>
+            <span id="recommendation" class="trend-value">--</span>
+        </div>
+    </div>
+</div>
+
+
+    </div>
+  </div>
+</div>
+  <div class="footer">
+    <p>Desenvolvido para Análise Técnica com Indicadores Fibonacci | Dados via Alpha Vantage</p>
+  </div>
+  </div>
+  <script src="app.js"></script>
+
+
+</body>
+
+</html>
+
+
+<!--        .´.         -->
+<!--   1,618...yes my friends, it is EVERYWHERE   -->
+
+>>>>>>> 7c21d8e5bc0f1d71bdf22bdde043a222ccf18c56
