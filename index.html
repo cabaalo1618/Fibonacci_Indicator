@@ -103,21 +103,62 @@
 
   </div>
 
-  <!-- STATUS -->
-  <div id="loading" class="hidden">🔄 Carregando...</div>
-  <div id="error" class="error hidden"></div>
-  <div id="success" class="success hidden"></div>
+  <!--    RSI    -->
 
+  <!-- RSI -->
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed"
+            data-bs-toggle="collapse"
+            data-bs-target="#rsiPanel">
+      📊 RSI
+    </button>
+  </h2>
+
+  <div id="rsiPanel" class="accordion-collapse collapse">
+    <div class="accordion-body">
+
+      <input id="rsiPeriod" type="number" value="14" placeholder="Período">
+
+      <input id="rsiColor" type="color" value="#ff6b6b">
+
+      <input id="rsiUpper" type="number" value="70" placeholder="Overbought">
+
+      <input id="rsiLower" type="number" value="30" placeholder="Oversold">
+
+      <input id="rsiWidth" type="number" value="2" placeholder="Espessura">
+
+      <div style="display:flex; gap:6px; margin-top:6px;">
+        <button id="rsiBtn">Gerar RSI</button>
+        <button id="clearRsiBtn">Limpar RSI</button>
+      </div>
+
+    </div>
+  </div>
 </div>
 
-<!-- CHART -->
-<div class="container-fluid mt-3">
-  <div id="chartContainer" style="height: 65vh;"></div>
-</div>
+
+
+<!-- CHARTS -->
+<section class="charts-wrapper">
+
+  <!-- GRÁFICO PRINCIPAL -->
+  <div id="chartContainer"></div>
+
+  <!-- RSI (colado no gráfico) -->
+  <div id="rsiContainer"></div>
+
+</section>
+
 
 <footer class="text-center mt-4">
   <small>Dados via Alpha Vantage • Fibonacci 1.618</small>
 </footer>
+
+<div id="loading" class="hidden status">🔄 ok </div>
+<div id="error" class="hidden error"></div>
+<div id="success" class="hidden success"></div>
+
 
 <!-- JS -->
 <script type="module" src="src/main.js"></script>

@@ -174,4 +174,3 @@ export function clearMA() {
   maSeries.forEach(series => chart.removeSeries(series));
   maSeries = [];
 }
-

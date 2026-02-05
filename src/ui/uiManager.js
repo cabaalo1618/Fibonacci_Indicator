@@ -1,48 +1,51 @@
-export function showLoading(show) {
-    const l = document.getElementById('loading');
-    const b = document.getElementById('buscar');
+const loadingEl = document.getElementById("loading");
+const errorEl   = document.getElementById("error");
+const successEl = document.getElementById("success");
 
-    l.classList.toggle('hidden', !show);
-    b.disabled = show;
-    b.textContent = show ? '⏳ Carregando...' : '🚀 Buscar Dados';
+export function showLoading(show = true) {
+  if (!loadingEl) return;
+  loadingEl.classList.toggle("hidden", !show);
 }
 
-export function showError(msg) {
-    const e = document.getElementById('error');
-    e.textContent = msg;
-    e.classList.remove('hidden');
-    setTimeout(()=>e.classList.add('hidden'),10000);
+export function showError(message) {
+  if (!errorEl) return;
+  errorEl.textContent = message;
+  errorEl.classList.remove("hidden");
+
+  setTimeout(() => {
+    errorEl.classList.add("hidden");
+  }, 4000);
 }
 
-export function showSuccess(msg) {
-    const s = document.getElementById('success');
-    s.textContent = msg;
-    s.classList.remove('hidden');
-    setTimeout(()=>s.classList.add('hidden'),5000);
-}
+export function showSuccess(message) {
+  if (!successEl) return;
+  successEl.textContent = message;
+  successEl.classList.remove("hidden");
 
-export function hideMessages(){
-    document.getElementById('error').classList.add('hidden');
-    document.getElementById('success').classList.add('hidden');
+  setTimeout(() => {
+    successEl.classList.add("hidden");
+  }, 3000);
 }
-
-import { SYMBOLS } from '../utils/symbols.js';
 
 export function populateSymbolSelector(market) {
-    const select = document.getElementById('symbol');
-    if (!select) {
-        console.error('❌ Select #symbol não encontrado');
-        return;
-    }
+  const select = document.getElementById("symbol");
+  if (!select) return;
 
-    select.innerHTML = '';
+  select.innerHTML = "";
 
-    SYMBOLS[market].forEach(item => {
-        const option = document.createElement('option');
-        option.value = item.value;
-        option.textContent = item.label;
-        select.appendChild(option);
-    });
+  const symbols = {
+    stocks: ["AAPL", "MSFT", "GOOGL"],
+    forex: ["USD/BRL", "EUR/USD", "GBP/USD"],
+    crypto: ["BTC/USD", "ETH/USD"]
+  };
 
-    console.log('✅ Seletor populado:', market);
+  symbols[market].forEach(sym => {
+    const option = document.createElement("option");
+    option.value = sym;
+    option.textContent = sym;
+    select.appendChild(option);
+  });
+
+  console.log(`✅ Seletor populado: ${market}`);
 }
+
