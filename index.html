@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,152 +18,178 @@
 
 <body>
 
-<div class="container">
+  <div class="container">
 
-  <!-- HEADER -->
-  <header class="text-center my-3">
-    <h1>📈 Indicador Fibonacci</h1>
-    <p>Análise Técnica de Mercado</p>
-    <small>Por Thiago Monteiro</small>
-  </header>
+    <!-- HEADER -->
+    <header class="text-center my-3">
+      <h1>📈 Indicador Fibonacci</h1>
+      <p>Análise Técnica de Mercado</p>
+      <small>Por Thiago Monteiro</small>
+    </header>
 
-  <!-- CONTROLES -->
-  <section class="controls">
+    <!-- CONTROLES -->
+    <section class="controls">
 
-    <div class="control-group">
-      <label>Mercado:</label>
-      <div class="market-type">
-        <div class="market-btn active" data-type="stocks">Ações</div>
-        <div class="market-btn" data-type="forex">Forex</div>
-        <div class="market-btn" data-type="crypto">Crypto</div>
+      <div class="control-group">
+        <label>Mercado:</label>
+        <div class="market-type">
+          <div class="market-btn active" data-type="stocks">Ações</div>
+          <div class="market-btn" data-type="forex">Forex</div>
+          <div class="market-btn" data-type="crypto">Crypto</div>
+        </div>
       </div>
-    </div>
 
-    <div class="control-group">
-      <label>Símbolo:</label>
-      <select id="symbol"></select>
-    </div>
+      <div class="control-group">
+        <label>Símbolo:</label>
+        <select id="symbol"></select>
+      </div>
 
-    <div class="control-group">
-      <label>Data Inicial:</label>
-      <input id="dateFrom" type="date">
-    </div>
+      <div class="control-group">
+        <label>Data Inicial:</label>
+        <input id="dateFrom" type="date">
+      </div>
 
-    <button id="buscar">🚀 Buscar Dados</button>
-  </section>
+      <button id="buscar">🚀 Buscar Dados</button>
+    </section>
 
-  <!-- ACCORDION -->
-  <div class="accordion mt-4" id="accordionIndicators">
+    <!-- ACCORDION -->
+    <div class="accordion mt-4" id="accordionIndicators">
 
-    <!-- FIBONACCI -->
-    <div class="accordion-item">
+      <!-- FIBONACCI -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#fiboPanel">
+            📐 Fibonacci
+          </button>
+        </h2>
+        <div id="fiboPanel" class="accordion-collapse collapse">
+          <div class="accordion-body dark-panel">
+            <input id="fibHigh" type="number" placeholder="Máximo">
+            <input id="fibLow" type="number" placeholder="Mínimo">
+            <input id="fibColor" type="color" value="#f5d76e">
+            <input id="fibWidth" type="number" value="1">
+            <select id="fibStyle">
+              <option value="0">Sólida</option>
+              <option value="1">Pontilhada</option>
+              <option value="2">Tracejada</option>
+            </select>
+            <button id="manualFibBtn">Gerar Fibonacci</button>
+            <button id="clearFibBtn">Limpar Fibonacci</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOVING AVERAGE -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#maPanel">
+            📈 Moving Average
+          </button>
+        </h2>
+        <div id="maPanel" class="accordion-collapse collapse">
+          <div class="accordion-body dark-panel">
+            <input id="maPeriod" type="number" value="20">
+            <input id="maWidth" type="number" value="2">
+            <input id="maColor" type="color" value="#00ffea">
+            <select id="maStyle">
+              <option value="0">Sólida</option>
+              <option value="1">Pontilhada</option>
+              <option value="2">Tracejada</option>
+            </select>
+            <button id="maBtn">Gerar MA</button>
+            <button id="clearMaBtn">Limpar MA</button>
+          </div>
+        </div>
+      </div>
+
+     </div>
+
+     <!--    RSI    -->
+
+     <!-- RSI -->
+     <div class="accordion-item">
       <h2 class="accordion-header">
-        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#fiboPanel">
-          📐 Fibonacci
+        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#rsiPanel">
+          📊 RSI
         </button>
       </h2>
-      <div id="fiboPanel" class="accordion-collapse collapse">
-        <div class="accordion-body dark-panel">
-          <input id="fibHigh" type="number" placeholder="Máximo">
-          <input id="fibLow" type="number" placeholder="Mínimo">
-          <input id="fibColor" type="color" value="#f5d76e">
-          <input id="fibWidth" type="number" value="1">
-          <select id="fibStyle">
-            <option value="0">Sólida</option>
-            <option value="1">Pontilhada</option>
-            <option value="2">Tracejada</option>
-          </select>
-          <button id="manualFibBtn">Gerar Fibonacci</button>
-          <button id="clearFibBtn">Limpar Fibonacci</button>
+
+      <div id="rsiPanel" class="accordion-collapse collapse">
+        <div class="accordion-body">
+
+          <input id="rsiPeriod" type="number" value="14" placeholder="Período">
+
+          <input id="rsiColor" type="color" value="#ff6b6b">
+
+          <input id="rsiUpper" type="number" value="70" placeholder="Overbought">
+
+          <input id="rsiLower" type="number" value="30" placeholder="Oversold">
+
+          <input id="rsiWidth" type="number" value="2" placeholder="Espessura">
+
+          <div style="display:flex; gap:6px; margin-top:6px;">
+            <button id="rsiBtn">Gerar RSI</button>
+            <button id="clearRsiBtn">Limpar RSI</button>
+          </div>
+
         </div>
       </div>
     </div>
 
-    <!-- MOVING AVERAGE -->
+    <!-- DRAWING TOOLS -->
     <div class="accordion-item">
       <h2 class="accordion-header">
-        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#maPanel">
-          📈 Moving Average
+        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#drawPanel">
+          ✏️ Drawing Tools
         </button>
       </h2>
-      <div id="maPanel" class="accordion-collapse collapse">
+
+      <div id="drawPanel" class="accordion-collapse collapse">
         <div class="accordion-body dark-panel">
-          <input id="maPeriod" type="number" value="20">
-          <input id="maWidth" type="number" value="2">
-          <input id="maColor" type="color" value="#00ffea">
-          <select id="maStyle">
+
+          <button id="trendlineBtn">📐 Trend Line</button>
+
+          <input id="drawColor" type="color" value="#00ffea">
+          <input id="drawWidth" type="number" value="2">
+
+          <select id="drawStyle">
             <option value="0">Sólida</option>
             <option value="1">Pontilhada</option>
             <option value="2">Tracejada</option>
           </select>
-          <button id="maBtn">Gerar MA</button>
-          <button id="clearMaBtn">Limpar MA</button>
+
+          <button id="clearDrawingsBtn">🧹 Limpar desenhos</button>
+
         </div>
       </div>
     </div>
 
+
+    <!-- CHARTS -->
+    <section class="charts-wrapper">
+
+      <!-- GRÁFICO PRINCIPAL -->
+      <div id="chartContainer"></div>
+
+      <!-- RSI (colado no gráfico) -->
+      <div id="rsiContainer"></div>
+
+    </section>
+
+
+    <footer class="text-center mt-4">
+      <small>Dados via Alpha Vantage • Fibonacci 1.618</small>
+    </footer>
+
+    <div id="loading" class="hidden status">🔄 ok </div>
+    <div id="error" class="hidden error"></div>
+    <div id="success" class="hidden success"></div>
   </div>
 
-  <!--    RSI    -->
-
-  <!-- RSI -->
-<div class="accordion-item">
-  <h2 class="accordion-header">
-    <button class="accordion-button collapsed"
-            data-bs-toggle="collapse"
-            data-bs-target="#rsiPanel">
-      📊 RSI
-    </button>
-  </h2>
-
-  <div id="rsiPanel" class="accordion-collapse collapse">
-    <div class="accordion-body">
-
-      <input id="rsiPeriod" type="number" value="14" placeholder="Período">
-
-      <input id="rsiColor" type="color" value="#ff6b6b">
-
-      <input id="rsiUpper" type="number" value="70" placeholder="Overbought">
-
-      <input id="rsiLower" type="number" value="30" placeholder="Oversold">
-
-      <input id="rsiWidth" type="number" value="2" placeholder="Espessura">
-
-      <div style="display:flex; gap:6px; margin-top:6px;">
-        <button id="rsiBtn">Gerar RSI</button>
-        <button id="clearRsiBtn">Limpar RSI</button>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-
-
-<!-- CHARTS -->
-<section class="charts-wrapper">
-
-  <!-- GRÁFICO PRINCIPAL -->
-  <div id="chartContainer"></div>
-
-  <!-- RSI (colado no gráfico) -->
-  <div id="rsiContainer"></div>
-
-</section>
-
-
-<footer class="text-center mt-4">
-  <small>Dados via Alpha Vantage • Fibonacci 1.618</small>
-</footer>
-
-<div id="loading" class="hidden status">🔄 ok </div>
-<div id="error" class="hidden error"></div>
-<div id="success" class="hidden success"></div>
-
-
-<!-- JS -->
-<script type="module" src="src/main.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- JS -->
+    <script type="module" src="src/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

@@ -1,17 +1,29 @@
 import { showError } from "../ui/uiManager.js";
 
+// ========== Drawing tools ======
+
+let activeDrawingTool = null;
+let drawingOptions = {
+  color: "#00ffea",
+  width: 2,
+  style: 0
+};
+
+let firstPoint = null;
+let drawnObjects = [];
+
+
 let chart = null;
 let candleSeries = null;
 let maSeries = [];
 
 /* ===========================
-   ESTADOS DE INDICADORES
-=========================== */
+   ESTADOS DE INDICADORES */
 let fibonacciLines = [];
 
 /* ===========================
    INICIALIZAÇÃO DO GRÁFICO
-=========================== */
+*/
 export function initializeChart(containerId) {
   console.log("🔄 Inicializando gráfico...");
 
@@ -65,8 +77,76 @@ export function initializeChart(containerId) {
     });
   });
 
+  // drawning tools =======
+  chart.subscribeClick(param => {
+  if (!activeDrawingTool) return;
+  if (!param.time || !param.point) return;
+
+  const price = candleSeries.coordinateToPrice(param.point.y);
+  if (!price) return;
+
+  const point = {
+    time: param.time,
+    value: price
+  };
+
+  if (!firstPoint) {
+    firstPoint = point;
+  } else {
+    drawTrendLine(firstPoint, point);
+    firstPoint = null;
+  }
+});
+
+
+
   console.log("✅ Gráfico inicializado!");
 }
+
+
+export function setDrawingTool(tool, options) {
+  activeDrawingTool = tool;
+  drawingOptions = options;
+  firstPoint = null;
+
+  const el = document.getElementById("chartContainer");
+
+  if (tool) {
+    el.classList.add("chart-drawing");
+  } else {
+    el.classList.remove("chart-drawing");
+  }
+}
+
+export function clearDrawings() {
+  drawnObjects.forEach(s => chart.removeSeries(s));
+  drawnObjects = [];
+  activeDrawingTool = null;
+
+  document
+    .getElementById("chartContainer")
+    .classList.remove("chart-drawing");
+}
+
+
+
+function drawTrendLine(p1, p2) {
+  const series = chart.addLineSeries({
+    color: drawingOptions.color,
+    lineWidth: drawingOptions.width,
+    lineStyle: drawingOptions.style
+  });
+
+  series.setData([
+    { time: p1.time, value: p1.value },
+    { time: p2.time, value: p2.value }
+  ]);
+
+  drawnObjects.push(series);
+}
+
+
+
 
 /* ===========================
    ATUALIZAÇÃO DE CANDLES
@@ -174,3 +254,6 @@ export function clearMA() {
   maSeries.forEach(series => chart.removeSeries(series));
   maSeries = [];
 }
+
+
+

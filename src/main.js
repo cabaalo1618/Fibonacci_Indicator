@@ -6,13 +6,11 @@ import {
   drawMA,
   clearMA
 } from './charts/chartManager.js';
-
+import { setDrawingTool, clearDrawings } from "./charts/chartManager.js";
 import { initializeRSI, drawRSI, clearRSI } from "./charts/rsiChart.js";
-
 import { fetchMarketData } from './api/alphaVantage.js';
 import { formatCandles } from './utils/dataFormatter.js';
 import { showLoading, showError, showSuccess, populateSymbolSelector } from './ui/uiManager.js';
-
 import { calculateManualFibonacci } from './indicators/fibonacci.js';
 import { calculateMA } from "./indicators/movingAverage.js";
 import { calculateRSI } from "./indicators/rsi.js";
@@ -24,20 +22,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // DOM 
   document.querySelectorAll(".market-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".market-btn")
-      .forEach(b => b.classList.remove("active"));
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".market-btn")
+        .forEach(b => b.classList.remove("active"));
 
-    btn.classList.add("active");
+      btn.classList.add("active");
 
-    currentMarket = btn.dataset.type;
+      currentMarket = btn.dataset.type;
 
-    populateSymbolSelector(currentMarket);
+      populateSymbolSelector(currentMarket);
 
-    showSuccess(`📊 Mercado alterado para ${currentMarket.toUpperCase()}`);
-    console.log("📊 Mercado selecionado:", currentMarket);
+      showSuccess(`📊 Mercado alterado para ${currentMarket.toUpperCase()}`);
+      console.log("📊 Mercado selecionado:", currentMarket);
+    });
   });
-});
 
 
   // GRÁFICO PRINCIPAL
@@ -45,9 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
   populateSymbolSelector(currentMarket);
 
   //  RSI (somente quando abrir)
-  
-initializeRSI("rsiContainer");
-window.__rsiInitialized = true;
+
+  initializeRSI("rsiContainer");
+  window.__rsiInitialized = true;
 
 
   // ================= BUSCAR DADOS =================
@@ -78,44 +76,44 @@ window.__rsiInitialized = true;
   //===================   fibonacci   ===============================
 
   document.getElementById("manualFibBtn").addEventListener("click", () => {
-  if (!lastCandles.length) return showError("Carregue os dados primeiro");
+    if (!lastCandles.length) return showError("Carregue os dados primeiro");
 
-  const high = Number(document.getElementById("fibHigh").value);
-  const low = Number(document.getElementById("fibLow").value);
+    const high = Number(document.getElementById("fibHigh").value);
+    const low = Number(document.getElementById("fibLow").value);
 
-  if (!high || !low) return showError("Informe máximo e mínimo");
+    if (!high || !low) return showError("Informe máximo e mínimo");
 
-  const levels = calculateManualFibonacci(high, low);
+    const levels = calculateManualFibonacci(high, low);
 
-  drawFibonacci(levels, {
-    color: document.getElementById("fibColor").value,
-    width: Number(document.getElementById("fibWidth").value),
-    style: Number(document.getElementById("fibStyle").value)
+    drawFibonacci(levels, {
+      color: document.getElementById("fibColor").value,
+      width: Number(document.getElementById("fibWidth").value),
+      style: Number(document.getElementById("fibStyle").value)
+    });
+
+    showSuccess("📐 Fibonacci gerado");
   });
-
-  showSuccess("📐 Fibonacci gerado");
-});
-document.getElementById("clearFibBtn").addEventListener("click", () => {
-  clearFibonacci();
-});
+  document.getElementById("clearFibBtn").addEventListener("click", () => {
+    clearFibonacci();
+  });
 
   // ================ MA =====================
 
   document.getElementById("maBtn").addEventListener("click", () => {
-  if (!lastCandles.length) return showError("Carregue os dados primeiro");
+    if (!lastCandles.length) return showError("Carregue os dados primeiro");
 
-  const period = Number(document.getElementById("maPeriod").value);
+    const period = Number(document.getElementById("maPeriod").value);
 
-  const maData = calculateMA(lastCandles, period);
+    const maData = calculateMA(lastCandles, period);
 
-  drawMA(maData, {
-    color: document.getElementById("maColor").value,
-    width: Number(document.getElementById("maWidth").value),
-    style: Number(document.getElementById("maStyle").value)
+    drawMA(maData, {
+      color: document.getElementById("maColor").value,
+      width: Number(document.getElementById("maWidth").value),
+      style: Number(document.getElementById("maStyle").value)
+    });
+
+    showSuccess("📈 MA aplicada");
   });
-
-  showSuccess("📈 MA aplicada");
-});
 
 
   // ================= RSI =================
@@ -143,6 +141,25 @@ document.getElementById("clearFibBtn").addEventListener("click", () => {
     showSuccess("❌ RSI removido");
   });
 
+  // drawing tools ============
+  document.getElementById("trendlineBtn").addEventListener("click", () => {
+  document.getElementById("trendlineBtn").classList.toggle("active");
+
+  setDrawingTool("trendline", {
+    color: document.getElementById("drawColor").value,
+    width: Number(document.getElementById("drawWidth").value),
+    style: Number(document.getElementById("drawStyle").value)
+  });
+
+  showSuccess("✏️ Clique em dois pontos no gráfico");
 });
 
-console.log("🧪 RSI data:", rsiData.length);
+document.getElementById("clearDrawingsBtn").addEventListener("click", () => {
+  clearDrawings();
+  showSuccess("🧹 Desenhos removidos");
+});
+
+
+});
+
+

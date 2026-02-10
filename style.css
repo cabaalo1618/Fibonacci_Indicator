@@ -164,3 +164,11 @@ button {
   color: var(--text-secondary);
   margin: 6px 0;
 }
+
+/*cursor*/
+.chart-drawing {
+  cursor: crosshair !important;
+}
+#chartContainer.chart-drawing {
+  cursor: crosshair;
+}
